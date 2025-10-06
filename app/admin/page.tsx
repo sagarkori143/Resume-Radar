@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { AdminResumeList } from "@/components/admin-resume-list"
 import { AdminStats } from "@/components/admin-stats"
+import { AdminRequestList } from "@/components/admin-request-list"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default async function AdminPage() {
@@ -26,6 +27,18 @@ export default async function AdminPage() {
     )
     .order("created_at", { ascending: false })
 
+  // Fetch admin requests
+  const { data: adminRequests } = await supabase
+    .from("admin_requests")
+    .select(
+      `
+      *,
+      user:users!admin_requests_user_id_fkey(email, full_name),
+      reviewer:users!admin_requests_reviewed_by_fkey(email, full_name)
+    `,
+    )
+    .order("created_at", { ascending: false })
+
   // Calculate stats
   const stats = {
     total: resumes?.length || 0,
@@ -33,10 +46,14 @@ export default async function AdminPage() {
     approved: resumes?.filter((r) => r.status === "approved").length || 0,
     needs_revision: resumes?.filter((r) => r.status === "needs_revision").length || 0,
     rejected: resumes?.filter((r) => r.status === "rejected").length || 0,
+    adminRequests: adminRequests?.length || 0,
+    pendingAdminRequests: adminRequests?.filter((r) => r.status === "pending").length || 0,
   }
 
   const pendingResumes = resumes?.filter((r) => r.status === "pending") || []
   const reviewedResumes = resumes?.filter((r) => r.status !== "pending") || []
+  const pendingAdminRequests = adminRequests?.filter((r) => r.status === "pending") || []
+  const allAdminRequests = adminRequests || []
 
   return (
     <div className="min-h-screen bg-background">
@@ -52,7 +69,7 @@ export default async function AdminPage() {
           <AdminStats stats={stats} />
 
           <Tabs defaultValue="pending" className="space-y-6">
-            <TabsList>
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="pending">
                 Pending Review
                 {stats.pending > 0 && (
@@ -63,6 +80,15 @@ export default async function AdminPage() {
               </TabsTrigger>
               <TabsTrigger value="reviewed">Reviewed</TabsTrigger>
               <TabsTrigger value="all">All Resumes</TabsTrigger>
+              <TabsTrigger value="admin-requests">
+                Admin Requests
+                {stats.pendingAdminRequests > 0 && (
+                  <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-purple-500/20 text-purple-600 dark:text-purple-400">
+                    {stats.pendingAdminRequests}
+                  </span>
+                )}
+              </TabsTrigger>
+              <TabsTrigger value="all-requests">All Requests</TabsTrigger>
             </TabsList>
 
             <TabsContent value="pending" className="space-y-4">
@@ -75,6 +101,14 @@ export default async function AdminPage() {
 
             <TabsContent value="all" className="space-y-4">
               <AdminResumeList resumes={resumes || []} />
+            </TabsContent>
+
+            <TabsContent value="admin-requests" className="space-y-4">
+              <AdminRequestList requests={pendingAdminRequests} />
+            </TabsContent>
+
+            <TabsContent value="all-requests" className="space-y-4">
+              <AdminRequestList requests={allAdminRequests} />
             </TabsContent>
           </Tabs>
         </div>

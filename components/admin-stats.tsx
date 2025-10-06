@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card"
-import { FileText, Clock, CheckCircle, AlertCircle, XCircle } from "lucide-react"
+import { FileText, Clock, CheckCircle, AlertCircle, XCircle, Shield } from "lucide-react"
 
 interface AdminStatsProps {
   stats: {
@@ -8,12 +8,14 @@ interface AdminStatsProps {
     approved: number
     needs_revision: number
     rejected: number
+    adminRequests?: number
+    pendingAdminRequests?: number
   }
 }
 
 export function AdminStats({ stats }: AdminStatsProps) {
   return (
-    <div className="grid gap-4 md:grid-cols-5">
+    <div className="grid gap-4 md:grid-cols-5 lg:grid-cols-7">
       <Card className="p-6">
         <div className="flex items-center gap-4">
           <div className="rounded-full bg-primary/10 p-3">
@@ -73,6 +75,34 @@ export function AdminStats({ stats }: AdminStatsProps) {
           </div>
         </div>
       </Card>
+
+      {stats.adminRequests !== undefined && (
+        <Card className="p-6">
+          <div className="flex items-center gap-4">
+            <div className="rounded-full bg-purple-500/10 p-3">
+              <Shield className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Admin Requests</p>
+              <p className="text-2xl font-bold">{stats.adminRequests}</p>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {stats.pendingAdminRequests !== undefined && (
+        <Card className="p-6">
+          <div className="flex items-center gap-4">
+            <div className="rounded-full bg-orange-500/10 p-3">
+              <Shield className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Pending Requests</p>
+              <p className="text-2xl font-bold">{stats.pendingAdminRequests}</p>
+            </div>
+          </div>
+        </Card>
+      )}
     </div>
   )
 }

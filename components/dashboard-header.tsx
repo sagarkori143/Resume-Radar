@@ -38,6 +38,12 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
+            <Link href="/">
+              <Button variant="ghost" size="sm">
+                <FileText className="h-4 w-4 mr-2" />
+                ResumeReview
+              </Button>
+            </Link>
             <Link href="/dashboard">
               <Button variant="ghost" size="sm">
                 <LayoutDashboard className="h-4 w-4 mr-2" />
@@ -77,10 +83,16 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
+              <Link href="/">ResumeReview</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link href="/dashboard">Dashboard</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/leaderboard">Leaderboard</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/profile">Profile</Link>
             </DropdownMenuItem>
             {user.is_admin && (
               <DropdownMenuItem asChild>

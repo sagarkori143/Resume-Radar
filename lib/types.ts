@@ -36,3 +36,22 @@ export interface LeaderboardEntry {
   file_name: string
   reviewed_at: string
 }
+
+export type AdminRequestStatus = "pending" | "approved" | "rejected"
+
+export interface AdminRequest {
+  id: string
+  user_id: string
+  reason: string
+  status: AdminRequestStatus
+  reviewed_by: string | null
+  reviewed_at: string | null
+  admin_notes: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface AdminRequestWithUser extends AdminRequest {
+  user: Pick<User, "email" | "full_name">
+  reviewer?: Pick<User, "email" | "full_name">
+}
