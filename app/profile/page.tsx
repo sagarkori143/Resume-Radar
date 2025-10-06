@@ -115,27 +115,6 @@ export default async function ProfilePage() {
                     </div>
                   </div>
                   
-                  <div className="p-4 rounded-lg border bg-card">
-                    <h4 className="font-medium mb-2">Resume Statistics</h4>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Total Resumes:</span>
-                        <span>{stats.totalResumes}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Approved:</span>
-                        <span className="text-green-600">{stats.approvedResumes}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Pending:</span>
-                        <span className="text-yellow-600">{stats.pendingResumes}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Avg Score:</span>
-                        <span>{stats.averageScore.toFixed(1)}/100</span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </TabsContent>

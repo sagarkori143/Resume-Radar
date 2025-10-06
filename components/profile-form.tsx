@@ -85,7 +85,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
         </div>
 
         <div className="flex justify-end">
-          <Button type="submit" disabled={isLoading} className="gap-2">
+          <Button type="submit" disabled={isLoading} className="gap-2 cursor-pointer">
             <Save className="h-4 w-4" />
             {isLoading ? "Saving..." : "Save Changes"}
           </Button>

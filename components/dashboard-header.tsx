@@ -39,26 +39,26 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
 
           <nav className="hidden md:flex items-center gap-1">
             <Link href="/">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="cursor-pointer">
                 <FileText className="h-4 w-4 mr-2" />
                 ResumeReview
               </Button>
             </Link>
             <Link href="/dashboard">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="cursor-pointer">
                 <LayoutDashboard className="h-4 w-4 mr-2" />
                 Dashboard
               </Button>
             </Link>
             <Link href="/leaderboard">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="cursor-pointer">
                 <Trophy className="h-4 w-4 mr-2" />
                 Leaderboard
               </Button>
             </Link>
             {user.is_admin && (
               <Link href="/admin">
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="cursor-pointer">
                   Admin Panel
                 </Button>
               </Link>
@@ -68,7 +68,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+            <Button variant="ghost" className="relative h-10 w-10 rounded-full cursor-pointer">
               <Avatar>
                 <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
@@ -83,22 +83,8 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/">ResumeReview</Link>
+              <Link href="/profile" className="cursor-pointer">Profile</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard">Dashboard</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/leaderboard">Leaderboard</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/profile">Profile</Link>
-            </DropdownMenuItem>
-            {user.is_admin && (
-              <DropdownMenuItem asChild>
-                <Link href="/admin">Admin Panel</Link>
-              </DropdownMenuItem>
-            )}
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => signOut()}

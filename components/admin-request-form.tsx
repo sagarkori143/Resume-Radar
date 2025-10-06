@@ -111,7 +111,7 @@ export function AdminRequestForm({ user, adminRequests }: AdminRequestFormProps)
               <Button
                 type="submit"
                 disabled={isLoading || hasPendingRequest || !reason.trim()}
-                className="gap-2"
+                className="gap-2 cursor-pointer"
               >
                 <Send className="h-4 w-4" />
                 {isLoading ? "Submitting..." : "Submit Request"}

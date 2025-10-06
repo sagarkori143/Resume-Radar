@@ -17,16 +17,16 @@ export default function HomePage() {
           </div>
           <nav className="flex items-center gap-2">
             <Link href="/leaderboard">
-              <Button variant="ghost" className="hidden sm:flex">
+              <Button variant="ghost" className="hidden sm:flex cursor-pointer">
                 <Award className="h-4 w-4 mr-2" />
                 Leaderboard
               </Button>
             </Link>
             <Link href="/auth/login">
-              <Button variant="ghost">Sign In</Button>
+              <Button variant="ghost" className="cursor-pointer">Sign In</Button>
             </Link>
             <Link href="/auth/login">
-              <Button className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70">
+              <Button className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 cursor-pointer">
                 Get Started
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
@@ -60,14 +60,14 @@ export default function HomePage() {
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
             <Link href="/auth/login">
-              <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300">
+              <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer">
                 <FileText className="h-5 w-5 mr-2" />
                 Upload Your Resume
                 <ArrowRight className="h-5 w-5 ml-2" />
               </Button>
             </Link>
             <Link href="/leaderboard">
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2 hover:bg-muted/50 transition-all duration-300">
+              <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2 hover:bg-muted/50 transition-all duration-300 cursor-pointer">
                 <Award className="h-5 w-5 mr-2" />
                 View Leaderboard
               </Button>
@@ -205,13 +205,13 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/auth/login">
-              <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300">
+              <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer">
                 Start Your Journey
                 <ArrowRight className="h-5 w-5 ml-2" />
               </Button>
             </Link>
             <Link href="/leaderboard">
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2 hover:bg-muted/50 transition-all duration-300">
+              <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2 hover:bg-muted/50 transition-all duration-300 cursor-pointer">
                 See Success Stories
               </Button>
             </Link>
@@ -238,9 +238,9 @@ export default function HomePage() {
             <div className="space-y-4">
               <h5 className="font-semibold">Platform</h5>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <div><Link href="/leaderboard" className="hover:text-foreground transition-colors">Leaderboard</Link></div>
-                <div><Link href="/auth/login" className="hover:text-foreground transition-colors">Sign In</Link></div>
-                <div><Link href="/auth/login" className="hover:text-foreground transition-colors">Get Started</Link></div>
+                <div><Link href="/leaderboard" className="hover:text-foreground transition-colors cursor-pointer">Leaderboard</Link></div>
+                <div><Link href="/auth/login" className="hover:text-foreground transition-colors cursor-pointer">Sign In</Link></div>
+                <div><Link href="/auth/login" className="hover:text-foreground transition-colors cursor-pointer">Get Started</Link></div>
               </div>
             </div>
             

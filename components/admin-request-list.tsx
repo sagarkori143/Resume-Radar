@@ -136,7 +136,7 @@ export function AdminRequestList({ requests }: AdminRequestListProps) {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-green-600 border-green-600 hover:bg-green-50"
+                      className="text-green-600 border-green-600 hover:bg-green-50 cursor-pointer"
                     >
                       <CheckCircle className="h-4 w-4 mr-2" />
                       Approve
@@ -161,7 +161,7 @@ export function AdminRequestList({ requests }: AdminRequestListProps) {
                         <Button
                           onClick={() => handleReview(request.id, "approved")}
                           disabled={isLoading === request.id}
-                          className="bg-green-600 hover:bg-green-700"
+                          className="bg-green-600 hover:bg-green-700 cursor-pointer"
                         >
                           {isLoading === request.id ? "Approving..." : "Approve Request"}
                         </Button>
@@ -175,7 +175,7 @@ export function AdminRequestList({ requests }: AdminRequestListProps) {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-red-600 border-red-600 hover:bg-red-50"
+                      className="text-red-600 border-red-600 hover:bg-red-50 cursor-pointer"
                     >
                       <XCircle className="h-4 w-4 mr-2" />
                       Reject
@@ -201,6 +201,7 @@ export function AdminRequestList({ requests }: AdminRequestListProps) {
                           onClick={() => handleReview(request.id, "rejected")}
                           disabled={isLoading === request.id}
                           variant="destructive"
+                          className="cursor-pointer"
                         >
                           {isLoading === request.id ? "Rejecting..." : "Reject Request"}
                         </Button>
