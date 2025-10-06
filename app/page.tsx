@@ -130,7 +130,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t mt-20">
         <div className="container mx-auto px-4 py-8 text-center text-sm text-muted-foreground">
-          <p>Built with Next.js, Supabase, and Tailwind CSS</p>
+          <p>Built with with ❤️ by Sagar Kori</p>
         </div>
       </footer>
     </div>
