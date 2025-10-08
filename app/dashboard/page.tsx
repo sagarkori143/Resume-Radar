@@ -1,7 +1,7 @@
 import { getSupabaseServerClient } from "@/lib/supabase/server"
 import { getCurrentUser } from "@/lib/actions/auth"
 import { redirect } from "next/navigation"
-import { DashboardHeader } from "@/components/dashboard-header"
+import { Navbar } from "@/components/navbar"
 import { ResumeUpload } from "@/components/resume-upload"
 import { ResumeList } from "@/components/resume-list"
 
@@ -22,7 +22,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <DashboardHeader user={user} />
+      <Navbar user={user} variant="dashboard" />
 
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto space-y-8">

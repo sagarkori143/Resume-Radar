@@ -2,38 +2,15 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { FileText, CheckCircle, Clock, XCircle, TrendingUp, Star, Users, Award, ArrowRight, Sparkles, Shield, Zap } from "lucide-react"
 import Link from "next/link"
+import { Navbar } from "@/components/navbar"
+import { getCurrentUser } from "@/lib/actions/auth"
 
-export default function HomePage() {
+export default async function HomePage() {
+  const user = await getCurrentUser()
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      {/* Header */}
-      <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <FileText className="h-6 w-6 text-primary" />
-            </div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">ResumeReview</h1>
-          </div>
-          <nav className="flex items-center gap-2">
-            <Link href="/leaderboard">
-              <Button variant="ghost" className="hidden sm:flex cursor-pointer">
-                <Award className="h-4 w-4 mr-2" />
-                Leaderboard
-              </Button>
-            </Link>
-            <Link href="/auth/login">
-              <Button variant="ghost" className="cursor-pointer">Sign In</Button>
-            </Link>
-            <Link href="/auth/login">
-              <Button className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 cursor-pointer">
-                Get Started
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <Navbar user={user} variant="landing" />
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 relative overflow-hidden">
@@ -59,7 +36,7 @@ export default function HomePage() {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-            <Link href="/auth/login">
+            <Link href="/dashboard">
               <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer">
                 <FileText className="h-5 w-5 mr-2" />
                 Upload Your Resume

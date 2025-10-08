@@ -6,9 +6,12 @@ import { redirect } from "next/navigation"
 export async function signInWithMagicLink(email: string, redirectTo?: string) {
   const supabase = await getSupabaseServerClient()
 
-  // Determine the correct redirect URL
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://resume-radar-ochre.vercel.app'
-  const redirectUrl = `${siteUrl}/auth/callback`
+  // Determine the correct redirect URL based on environment
+  const isDevelopment = process.env.NODE_ENV === 'development'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 
+    (isDevelopment ? 'http://localhost:3000' : 'https://resume-radar-ochre.vercel.app')
+  
+  const redirectUrl = redirectTo || `${siteUrl}/auth/callback`
 
   const { error } = await supabase.auth.signInWithOtp({
     email,

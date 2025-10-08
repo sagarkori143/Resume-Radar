@@ -1,9 +1,9 @@
 import { getSupabaseServerClient } from "@/lib/supabase/server"
 import { getCurrentUser } from "@/lib/actions/auth"
-import { DashboardHeader } from "@/components/dashboard-header"
+import { Navbar } from "@/components/navbar"
 import { LeaderboardTable } from "@/components/leaderboard-table"
 import { Card } from "@/components/ui/card"
-import { Trophy, Medal, Award, FileText } from "lucide-react"
+import { Trophy, Medal, Award } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
@@ -34,26 +34,7 @@ export default async function LeaderboardPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {user ? (
-        <DashboardHeader user={user} />
-      ) : (
-        <header className="border-b">
-          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <FileText className="h-6 w-6" />
-              <h1 className="text-xl font-bold">ResumeReview</h1>
-            </Link>
-            <nav className="flex items-center gap-4">
-              <Link href="/auth/login">
-                <Button variant="ghost">Sign In</Button>
-              </Link>
-              <Link href="/auth/login">
-                <Button>Get Started</Button>
-              </Link>
-            </nav>
-          </div>
-        </header>
-      )}
+      <Navbar user={user} variant="dashboard" />
 
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto space-y-8">

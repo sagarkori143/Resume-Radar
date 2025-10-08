@@ -1,7 +1,7 @@
 import { getSupabaseServerClient } from "@/lib/supabase/server"
 import { getCurrentUser } from "@/lib/actions/auth"
 import { redirect } from "next/navigation"
-import { DashboardHeader } from "@/components/dashboard-header"
+import { Navbar } from "@/components/navbar"
 import { ProfileForm } from "@/components/profile-form"
 import { AdminRequestForm } from "@/components/admin-request-form"
 import { UserStats } from "@/components/user-stats"
@@ -43,7 +43,7 @@ export default async function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <DashboardHeader user={user} />
+      <Navbar user={user} variant="dashboard" />
 
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto space-y-8">
