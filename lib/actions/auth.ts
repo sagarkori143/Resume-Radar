@@ -9,23 +9,11 @@ export async function signInWithMagicLink(email: string, redirectTo?: string) {
   // Determine the correct redirect URL
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://resume-radar-ochre.vercel.app'
   const redirectUrl = `${siteUrl}/auth/callback`
-  
-  console.log('Environment check:', {
-    NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-    siteUrl,
-    redirectUrl
-  })
-
-  // Force production URL if we're in production
-  const finalRedirectUrl = process.env.NODE_ENV === 'production' 
-    ? 'https://resume-radar-ochre.vercel.app/auth/callback'
-    : redirectUrl
 
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: finalRedirectUrl,
+      emailRedirectTo: redirectUrl,
     },
   })
 
