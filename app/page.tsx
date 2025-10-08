@@ -181,7 +181,7 @@ export default async function HomePage() {
             Join thousands of professionals who have improved their resumes and landed their dream jobs.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/auth/login">
+            <Link href="/dashboard">
               <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer">
                 Start Your Journey
                 <ArrowRight className="h-5 w-5 ml-2" />
