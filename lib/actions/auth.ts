@@ -2,6 +2,7 @@
 
 import { getSupabaseServerClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
+import { sendWelcomeEmail, sendAdminRequestApprovedEmail, sendAdminRequestRejectedEmail } from "@/lib/email"
 
 export async function signInWithMagicLink(email: string, redirectTo?: string) {
   const supabase = await getSupabaseServerClient()
@@ -138,19 +139,49 @@ export async function reviewAdminRequest(
     throw new Error(error.message)
   }
 
+  // Get user details for email notification
+  const { data: requestData } = await supabase
+    .from("admin_requests")
+    .select(`
+      user_id,
+      users!admin_requests_user_id_fkey(email, full_name)
+    `)
+    .eq("id", requestId)
+    .single()
+
   // If approved, also update the user's admin status
   if (status === "approved") {
-    const { data: request } = await supabase
-      .from("admin_requests")
-      .select("user_id")
-      .eq("id", requestId)
-      .single()
-
-    if (request) {
+    if (requestData) {
       await supabase
         .from("users")
         .update({ is_admin: true })
-        .eq("id", request.user_id)
+        .eq("id", requestData.user_id)
+
+      // Send approval email
+      try {
+        if (requestData.users) {
+          await sendAdminRequestApprovedEmail(
+            requestData.users.email,
+            requestData.users.full_name,
+            adminNotes
+          )
+        }
+      } catch (emailError) {
+        console.error("Failed to send approval email:", emailError)
+      }
+    }
+  } else if (status === "rejected") {
+    // Send rejection email
+    try {
+      if (requestData?.users) {
+        await sendAdminRequestRejectedEmail(
+          requestData.users.email,
+          requestData.users.full_name,
+          adminNotes
+        )
+      }
+    } catch (emailError) {
+      console.error("Failed to send rejection email:", emailError)
     }
   }
 

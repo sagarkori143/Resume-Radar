@@ -264,7 +264,12 @@ Resume-Mitra/
    ```
 
 2. **Environment Setup**
-   Create `.env.local` file with your Supabase credentials:
+   Copy the example environment file and fill in your credentials:
+   ```bash
+   cp env.example .env.local
+   ```
+   
+   Then edit `.env.local` with your actual values:
    ```env
    # Supabase Configuration
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
@@ -272,6 +277,9 @@ Resume-Mitra/
    
    # Site Configuration
    NEXT_PUBLIC_SITE_URL=http://localhost:3000
+   
+   # Email Configuration (Resend)
+   RESEND_API_KEY=re_xxxxxxxxx
    ```
 
 3. **Database Setup**
