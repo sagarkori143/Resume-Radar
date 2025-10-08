@@ -9,8 +9,7 @@ export async function signInWithMagicLink(email: string, redirectTo?: string) {
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo:
-        process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL || `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+      emailRedirectTo:`${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
     },
   })
 
@@ -114,7 +113,7 @@ export async function reviewAdminRequest(
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user || !user.is_admin) {
+  if (!user || !user.user_metadata.is_admin) {
     throw new Error("Unauthorized")
   }
 
