@@ -1,36 +1,90 @@
-import { getSupabaseServerClient } from "@/lib/supabase/server"
-import { getCurrentUser } from "@/lib/actions/auth"
+"use client"
+
+import { useEffect, useState } from "react"
+import { getSupabaseBrowserClient } from "@/lib/supabase/client"
 import { Navbar } from "@/components/navbar"
 import { LeaderboardTable } from "@/components/leaderboard-table"
+import { LeaderboardSkeleton } from "@/components/skeletons/leaderboard-skeleton"
 import { Card } from "@/components/ui/card"
 import { Trophy, Medal, Award } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import type { User } from "@/lib/types"
 
-export default async function LeaderboardPage() {
-  const user = await getCurrentUser()
-  const supabase = await getSupabaseServerClient()
+interface LeaderboardEntry {
+  id: string
+  user_id: string
+  file_name: string
+  score: number
+  reviewed_at: string
+  user: {
+    email: string
+    full_name: string | null
+  }
+}
 
-  // Fetch top scoring resumes with user information
-  const { data: leaderboard } = await supabase
-    .from("resumes")
-    .select(
-      `
-      id,
-      user_id,
-      file_name,
-      score,
-      reviewed_at,
-      user:users!resumes_user_id_fkey(email, full_name)
-    `,
-    )
-    .not("score", "is", null)
-    .order("score", { ascending: false })
-    .order("reviewed_at", { ascending: false })
-    .limit(100)
+export default function LeaderboardPage() {
+  const [user, setUser] = useState<User | null>(null)
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
+  const [loading, setLoading] = useState(true)
+  const supabase = getSupabaseBrowserClient()
 
-  const topThree = leaderboard?.slice(0, 3) || []
-  const rest = leaderboard?.slice(3) || []
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Get current user
+        const { data: { user: currentUser } } = await supabase.auth.getUser()
+        
+        if (currentUser) {
+          // Fetch user data from our database
+          const { data: userData } = await supabase
+            .from("users")
+            .select("*")
+            .eq("id", currentUser.id)
+            .single()
+
+          if (userData) {
+            setUser(userData)
+          }
+        }
+
+        // Fetch leaderboard data
+        const { data: leaderboardData } = await supabase
+          .from("resumes")
+          .select(
+            `
+            id,
+            user_id,
+            file_name,
+            score,
+            reviewed_at,
+            user:users!resumes_user_id_fkey(email, full_name)
+          `,
+          )
+          .not("score", "is", null)
+          .order("score", { ascending: false })
+          .order("reviewed_at", { ascending: false })
+          .limit(100)
+
+        setLeaderboard(leaderboardData || [])
+      } catch (error) {
+        console.error("Error fetching leaderboard data:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    // Show skeleton immediately, then fetch data
+    fetchData()
+  }, [supabase])
+
+  // Always show skeleton first, then content when loaded
+  if (loading) {
+    return <LeaderboardSkeleton />
+  }
+
+  const topThree = leaderboard.slice(0, 3)
+  const rest = leaderboard.slice(3)
 
   return (
     <div className="min-h-screen bg-background">
