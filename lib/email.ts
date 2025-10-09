@@ -1,6 +1,19 @@
-import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Create SMTP transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.SMTP_EMAIL || 'sagarkoriatwork@gmail.com',
+    pass: process.env.SMTP_PASSWORD,
+  },
+  tls: {
+    rejectUnauthorized: false
+  }
+})
 
 export interface EmailData {
   to: string
@@ -11,22 +24,20 @@ export interface EmailData {
 
 export async function sendEmail({ to, subject, html, text }: EmailData) {
   try {
-    const { data, error } = await resend.emails.send({
-      from: 'Resume-Mitra <onboarding@resend.dev>',
+    const mailOptions = {
+      from: `Resume-Mitra <${process.env.SMTP_EMAIL || 'sagarkoriatwork@gmail.com'}>`,
       to,
       subject,
       html,
-      text,
-    })
-
-    if (error) {
-      console.error('Email sending failed:', error)
-      return { success: false, error: error.message }
+      text: text || html.replace(/<[^>]*>/g, ''), // Convert HTML to text if no text provided
     }
 
-    return { success: true, messageId: data?.id }
+    const result = await transporter.sendMail(mailOptions)
+    console.log('Email sent successfully:', result.messageId)
+    
+    return { success: true, messageId: result.messageId }
   } catch (error) {
-    console.error('Email sending error:', error)
+    console.error('Email sending failed:', error)
     return { 
       success: false, 
       error: error instanceof Error ? error.message : 'Unknown error' 

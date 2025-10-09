@@ -126,7 +126,18 @@ export async function reviewAdminRequest(
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user || !user.user_metadata.is_admin) {
+  if (!user) {
+    throw new Error("User not authenticated")
+  }
+
+  // Get user data from database to check admin status
+  const { data: userData } = await supabase
+    .from("users")
+    .select("is_admin")
+    .eq("id", user.id)
+    .single()
+
+  if (!userData || !userData.is_admin) {
     throw new Error("Unauthorized")
   }
 

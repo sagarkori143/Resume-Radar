@@ -278,8 +278,9 @@ Resume-Mitra/
    # Site Configuration
    NEXT_PUBLIC_SITE_URL=http://localhost:3000
    
-   # Email Configuration (Resend)
-   RESEND_API_KEY=re_xxxxxxxxx
+   # Email Configuration (SMTP)
+   SMTP_EMAIL=your-email@gmail.com
+   SMTP_PASSWORD=your_app_password
    ```
 
 3. **Database Setup**
