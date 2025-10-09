@@ -1,5 +1,3 @@
-<img width="1501" height="887" alt="image" src="https://github.com/user-attachments/assets/264d5329-52fa-4136-b393-63220828feef" /># Resume-Mitra: Professional Resume Review Platform
-
 ## 📋 Table of Contents
 
 - [Features](#-features)
@@ -243,6 +241,8 @@ Resume-Mitra/
 -  Notification updates to the users:
    - <img width="1501" height="887" alt="image" src="https://github.com/user-attachments/assets/887b2621-21ff-4944-8264-ff89c5a2a9a2" />
    - <img width="1502" height="850" alt="image" src="https://github.com/user-attachments/assets/7d23e824-c5bb-4605-8343-de48ed780f25" />
+   - <img width="1499" height="860" alt="image" src="https://github.com/user-attachments/assets/3f465fad-e913-4a96-8b95-8898f23e772b" />
+
 
 
 
