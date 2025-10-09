@@ -10,7 +10,7 @@ export async function signInWithMagicLink(email: string, redirectTo?: string) {
   // Determine the correct redirect URL based on environment
   const isDevelopment = process.env.NODE_ENV === 'development'
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 
-    (isDevelopment ? 'http://localhost:3000' : 'https://resume-radar-ochre.vercel.app')
+    (isDevelopment ? 'http://localhost:3000' : 'https://resume-mitraa.vercel.app')
   
   const redirectUrl = redirectTo || `${siteUrl}/auth/callback`
 
