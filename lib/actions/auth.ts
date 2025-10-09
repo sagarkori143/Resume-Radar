@@ -17,8 +17,6 @@ export async function signInWithMagicLink(email: string, redirectTo?: string) {
   
   const redirectUrl = redirectTo || `${siteUrl}/auth/callback`
 
-  console.log('Magic link redirect URL:', redirectUrl) // Debug log
-
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
