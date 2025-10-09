@@ -7,12 +7,17 @@ import { sendWelcomeEmail, sendAdminRequestApprovedEmail, sendAdminRequestReject
 export async function signInWithMagicLink(email: string, redirectTo?: string) {
   const supabase = await getSupabaseServerClient()
 
-  // Determine the correct redirect URL based on environment
-  const isDevelopment = process.env.NODE_ENV === 'development'
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 
-    (isDevelopment ? 'http://localhost:3000' : 'https://resume-radar-ochre.vercel.app')
+  // Get site URL from environment variable
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  
+  if (!siteUrl) {
+    console.error('NEXT_PUBLIC_SITE_URL environment variable is not set')
+    return { error: 'Site URL not configured' }
+  }
   
   const redirectUrl = redirectTo || `${siteUrl}/auth/callback`
+
+  console.log('Magic link redirect URL:', redirectUrl) // Debug log
 
   const { error } = await supabase.auth.signInWithOtp({
     email,
@@ -121,7 +126,18 @@ export async function reviewAdminRequest(
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user || !user.user_metadata.is_admin) {
+  if (!user) {
+    throw new Error("User not authenticated")
+  }
+
+  // Get user data from database to check admin status
+  const { data: userData } = await supabase
+    .from("users")
+    .select("is_admin")
+    .eq("id", user.id)
+    .single()
+
+  if (!userData || !userData.is_admin) {
     throw new Error("Unauthorized")
   }
 
