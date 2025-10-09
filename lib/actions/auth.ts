@@ -7,8 +7,17 @@ import { sendWelcomeEmail, sendAdminRequestApprovedEmail, sendAdminRequestReject
 export async function signInWithMagicLink(email: string, redirectTo?: string) {
   const supabase = await getSupabaseServerClient()
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL  
+  // Get site URL from environment variable
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  
+  if (!siteUrl) {
+    console.error('NEXT_PUBLIC_SITE_URL environment variable is not set')
+    return { error: 'Site URL not configured' }
+  }
+  
   const redirectUrl = redirectTo || `${siteUrl}/auth/callback`
+
+  console.log('Magic link redirect URL:', redirectUrl) // Debug log
 
   const { error } = await supabase.auth.signInWithOtp({
     email,
