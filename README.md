@@ -15,9 +15,10 @@
 -  Track review progress with status updates (Pending, Approved, Needs Revision, Rejected)
 -  Competitive ranking system showcasing top-performing resumes
 -  Comprehensive dashboard for managing reviews and user requests
--  Secure authentication with Supabase Auth
+-  Secure authentication with Supabase Auth (Magic Link)
 -  Modern, mobile-first UI built with Tailwind CSS
--  Users can request admin privileges with proper justification
+-  Admin request system with email notifications
+-  SMTP email integration for status updates and notifications
 -  
 
 
@@ -118,6 +119,9 @@
 
 ## ️ Technology Stack
 
+<details>
+<summary>🔧 Click to expand Technology Stack Details</summary>
+
 #### **Next.js 15 with App Router**
 -  Chosen for its cutting-edge features and performance optimizations
   -  Reduces client-side JavaScript bundle size
@@ -157,11 +161,17 @@
 - Built-in file storage capabilities (though we use base64 for simplicity)
 
 #### **Supabase Auth**
--  Integrated authentication solution
+-  Integrated authentication solution with Magic Link
 -  Passwordless login for better UX
 -  Automatic session handling and refresh
 -  Industry-standard security practices
 -  Built-in user profile management
+
+#### **Email System (SMTP)**
+-  Nodemailer integration for reliable email delivery
+-  Automated notifications for resume status changes
+-  Admin request approval/rejection emails
+-  Gmail SMTP support with App Password authentication
 
 
 #### **TypeScript**
@@ -171,7 +181,8 @@
 #### **Zod**
 -  TypeScript-first schema validation
 - Validate data at runtime with TypeScript types
-  
+
+</details>
 
 ## 🔧 Project Structure
 
@@ -245,6 +256,11 @@ Resume-Mitra/
 
 
 
+### Admin Request System
+-  Users can request admin privileges with justification
+-  Admin approval/rejection workflow
+-  Email notifications for request status updates
+-  Secure admin-only access controls
 
 ### Leaderboard
 - Live leaderboard with top-scoring resumes
@@ -286,15 +302,20 @@ Resume-Mitra/
    
    # Email Configuration (SMTP)
    SMTP_EMAIL=your-email@gmail.com
-   SMTP_PASSWORD=your_app_password
+   SMTP_PASSWORD=your_gmail_app_password
    ```
+   
+   **Note**: For Gmail SMTP, you need to:
+   - Enable 2-Factor Authentication on your Google account
+   - Generate an App Password (not your regular password)
+   - Use the App Password as `SMTP_PASSWORD`
 
 3. **Database Setup**
    - Create a new Supabase project
    - Run the SQL schema below in your Supabase SQL editor:
 
    <details>
-   <summary>📋 Click to expand SQL Schema</summary>
+   <summary>📋 Click to expand Database Schema & Setup</summary>
 
    ```sql
    -- Users table
