@@ -1,59 +1,120 @@
-import { getSupabaseServerClient } from "@/lib/supabase/server"
-import { getCurrentUser } from "@/lib/actions/auth"
-import { redirect } from "next/navigation"
+"use client"
+
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { getSupabaseBrowserClient } from "@/lib/supabase/client"
 import { Navbar } from "@/components/navbar"
 import { AdminResumeList } from "@/components/admin-resume-list"
 import { AdminStats } from "@/components/admin-stats"
 import { AdminRequestList } from "@/components/admin-request-list"
+import { AdminSkeleton } from "@/components/skeletons/admin-skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import type { User } from "@/lib/types"
+import type { ResumeWithUser, AdminRequestWithUser } from "@/lib/types"
 
-export default async function AdminPage() {
-  const user = await getCurrentUser()
+interface AdminStats {
+  total: number
+  pending: number
+  approved: number
+  needs_revision: number
+  rejected: number
+  adminRequests: number
+  pendingAdminRequests: number
+}
 
-  if (!user || !user.is_admin) {
-    redirect("/dashboard")
+export default function AdminPage() {
+  const [user, setUser] = useState<User | null>(null)
+  const [resumes, setResumes] = useState<ResumeWithUser[]>([])
+  const [adminRequests, setAdminRequests] = useState<AdminRequestWithUser[]>([])
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
+  const supabase = getSupabaseBrowserClient()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Get current user
+        const { data: { user: currentUser } } = await supabase.auth.getUser()
+        
+        if (!currentUser) {
+          router.push("/dashboard")
+          return
+        }
+
+        // Fetch user data from our database
+        const { data: userData } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", currentUser.id)
+          .single()
+
+        if (!userData?.is_admin) {
+          router.push("/dashboard")
+          return
+        }
+
+        setUser(userData)
+
+        // Fetch all resumes with user information
+        const { data: resumesData } = await supabase
+          .from("resumes")
+          .select(
+            `
+            *,
+            user:users!resumes_user_id_fkey(email, full_name)
+          `,
+          )
+          .order("created_at", { ascending: false })
+
+        // Fetch admin requests
+        const { data: adminRequestsData } = await supabase
+          .from("admin_requests")
+          .select(
+            `
+            *,
+            user:users!admin_requests_user_id_fkey(email, full_name),
+            reviewer:users!admin_requests_reviewed_by_fkey(email, full_name)
+          `,
+          )
+          .order("created_at", { ascending: false })
+
+        setResumes(resumesData || [])
+        setAdminRequests(adminRequestsData || [])
+      } catch (error) {
+        console.error("Error fetching admin data:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    // Show skeleton immediately, then fetch data
+    fetchData()
+  }, [router, supabase])
+
+  // Always show skeleton first, then content when loaded
+  if (loading) {
+    return <AdminSkeleton />
   }
 
-  const supabase = await getSupabaseServerClient()
-
-  // Fetch all resumes with user information
-  const { data: resumes } = await supabase
-    .from("resumes")
-    .select(
-      `
-      *,
-      user:users!resumes_user_id_fkey(email, full_name)
-    `,
-    )
-    .order("created_at", { ascending: false })
-
-  // Fetch admin requests
-  const { data: adminRequests } = await supabase
-    .from("admin_requests")
-    .select(
-      `
-      *,
-      user:users!admin_requests_user_id_fkey(email, full_name),
-      reviewer:users!admin_requests_reviewed_by_fkey(email, full_name)
-    `,
-    )
-    .order("created_at", { ascending: false })
+  if (!user) {
+    return null // Will redirect
+  }
 
   // Calculate stats
-  const stats = {
-    total: resumes?.length || 0,
-    pending: resumes?.filter((r) => r.status === "pending").length || 0,
-    approved: resumes?.filter((r) => r.status === "approved").length || 0,
-    needs_revision: resumes?.filter((r) => r.status === "needs_revision").length || 0,
-    rejected: resumes?.filter((r) => r.status === "rejected").length || 0,
-    adminRequests: adminRequests?.length || 0,
-    pendingAdminRequests: adminRequests?.filter((r) => r.status === "pending").length || 0,
+  const stats: AdminStats = {
+    total: resumes.length,
+    pending: resumes.filter((r) => r.status === "pending").length,
+    approved: resumes.filter((r) => r.status === "approved").length,
+    needs_revision: resumes.filter((r) => r.status === "needs_revision").length,
+    rejected: resumes.filter((r) => r.status === "rejected").length,
+    adminRequests: adminRequests.length,
+    pendingAdminRequests: adminRequests.filter((r) => r.status === "pending").length,
   }
 
-  const pendingResumes = resumes?.filter((r) => r.status === "pending") || []
-  const reviewedResumes = resumes?.filter((r) => r.status !== "pending") || []
-  const pendingAdminRequests = adminRequests?.filter((r) => r.status === "pending") || []
-  const allAdminRequests = adminRequests || []
+  const pendingResumes = resumes.filter((r) => r.status === "pending")
+  const reviewedResumes = resumes.filter((r) => r.status !== "pending")
+  const pendingAdminRequests = adminRequests.filter((r) => r.status === "pending")
+  const allAdminRequests = adminRequests
 
   return (
     <div className="min-h-screen bg-background">
@@ -100,7 +161,7 @@ export default async function AdminPage() {
             </TabsContent>
 
             <TabsContent value="all" className="space-y-4">
-              <AdminResumeList resumes={resumes || []} />
+              <AdminResumeList resumes={resumes} />
             </TabsContent>
 
             <TabsContent value="admin-requests" className="space-y-4">
