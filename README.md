@@ -1,5 +1,3 @@
-# Resume-Mitra: Professional Resume Review Platform
-
 ## 📋 Table of Contents
 
 - [Features](#-features)
@@ -20,6 +18,7 @@
 -  Secure authentication with Supabase Auth
 -  Modern, mobile-first UI built with Tailwind CSS
 -  Users can request admin privileges with proper justification
+-  
 
 
 
@@ -239,6 +238,13 @@ Resume-Mitra/
 -  0-100 point scoring system
 -  Detailed reviewer feedback
 -  Comprehensive admin panel for managing reviews
+-  Notification updates to the users:
+   - <img width="1501" height="887" alt="image" src="https://github.com/user-attachments/assets/887b2621-21ff-4944-8264-ff89c5a2a9a2" />
+   - <img width="1502" height="850" alt="image" src="https://github.com/user-attachments/assets/7d23e824-c5bb-4605-8343-de48ed780f25" />
+   - <img width="1499" height="860" alt="image" src="https://github.com/user-attachments/assets/3f465fad-e913-4a96-8b95-8898f23e772b" />
+
+
+
 
 ### Leaderboard
 - Live leaderboard with top-scoring resumes
